@@ -7,6 +7,10 @@ Original file is located at
     https://colab.research.google.com/drive/1V14PLkuAh_mXojNewtuXrigZo2rtCtbK
 """
 
+
+import pandas as pd
+import numpy as np
+
 def limpando_dados(dados):
     dados_limpos = preenche_tabela(dados)
     a_remover = dados_limpos.query("WINDOW=='0-2' and ICU==1")['PATIENT_VISIT_IDENTIFIER'].values
