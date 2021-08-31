@@ -19,6 +19,9 @@ def limpando_dados(dados):
     dados_limpos = dados_limpos.groupby("PATIENT_VISIT_IDENTIFIER").apply(prepare_window)
     dados_limpos.AGE_PERCENTIL = dados_limpos.AGE_PERCENTIL.astype("category").cat.codes
     dados_limpos.reset_index(drop=True, inplace=True)
+    dados_limpos = remove_corr_var(dados_limpos)
+    dados_limpos = dados_limpos.drop(['WINDOW', 'PATIENT_VISIT_IDENTIFIER'], axis = 1)
+
 
     return dados_limpos
 
@@ -35,3 +38,11 @@ def prepare_window(rows):
     if(np.any(rows["ICU"])):
         rows.loc[rows["WINDOW"]=="0-2", "ICU"] = 1
     return rows.loc[rows["WINDOW"] == "0-2"]
+
+def remove_corr_var(dados, valor_corte = 0.95):
+
+    matrix_corr = dados.iloc[:,4:-2].corr().abs()
+    matrix_upper = matrix_corr.where(np.triu(np.ones(matrix_corr.shape), k=1).astype(np.bool))
+    excluir = [coluna for coluna in matrix_upper.columns if any(matrix_upper[coluna] > valor_corte)]
+
+    return dados.drop(excluir, axis=1)
