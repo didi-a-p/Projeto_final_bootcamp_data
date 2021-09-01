@@ -19,8 +19,8 @@ def limpando_dados(dados):
     dados_limpos = dados_limpos.groupby("PATIENT_VISIT_IDENTIFIER").apply(prepare_window)
     dados_limpos.AGE_PERCENTIL = dados_limpos.AGE_PERCENTIL.astype("category").cat.codes
     dados_limpos.reset_index(drop=True, inplace=True)
-    dados_limpos = remove_corr_var(dados_limpos)
-    dados_limpos = dados_limpos.drop(['WINDOW', 'PATIENT_VISIT_IDENTIFIER'], axis = 1)
+#    dados_limpos = remove_corr_var(dados_limpos)
+#    dados_limpos = dados_limpos.drop(['WINDOW', 'PATIENT_VISIT_IDENTIFIER'], axis = 1)
 
 
     return dados_limpos
